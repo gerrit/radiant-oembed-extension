@@ -1,3 +1,20 @@
 = Oembed
 
-Description goes here
+Easily embeds content like YouTube videos, Flickr photos and much more by URL.
+
+For a list of all supported providers see http://api.embed.ly/
+
+Simply write <r:oembed url="http://provider.example.org/photo/234" /> to get the default representation of the resource that is sent by the provider.
+
+Use the expanded form to access metadata about the object.
+Full-featured Example:
+
+<r:oembed url="http://vimeo.com/14592941" maxwidth="720">
+  <r:thumbnail />
+  <div class="video" style="display:none;"><r:html /></div>
+  <a href="http://vimeo.com/14592941"><r:title /></a>
+  by <a href="<r:author_url />"><r:author_name /></a>
+  on <a href="<r:provider_url />"><r:provider_name /></a>
+  <h3>Description:</h3>
+  <p><r:description /></p>
+</r:oembed>

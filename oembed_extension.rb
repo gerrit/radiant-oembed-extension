@@ -2,22 +2,15 @@
 # require_dependency 'application_controller'
 
 class OembedExtension < Radiant::Extension
-  version "1.0"
-  description "Describe your extension here"
-  url "http://yourwebsite.com/oembed"
+  version "0.1"
+  description "Easy embedding of arbitrary content (youtube, vimeo, flickr, …) using the oEmbed protocol and the embed.ly API"
+  url "http://github.com/gerrit/radiant-oembed-extension"
   
-  # extension_config do |config|
-  #   config.gem 'some-awesome-gem
-  #   config.after_initialize do
-  #     run_something
-  #   end
-  # end
-
-  # See your config/routes.rb file in this extension to define custom routes
+  extension_config do |config|
+    config.gem 'ruby-oembed', :version => '>=0.7.0', :lib => 'oembed'
+    Page.send :include, OEmbedTags
+  end
   
   def activate
-    # tab 'Content' do
-    #   add_item "Oembed", "/admin/oembed", :after => "Pages"
-    # end
   end
 end
