@@ -64,15 +64,33 @@ module OEmbedTags
     oembed(tag).html
   end
   
-  %w[title description html url
-    thumbnail_url thumbnail_width
+  %w[title description html
+    url width height
+    thumbnail_url thumbnail_width thumbnail_height
     author_name author_url
     provider_name provider_url].each do |attr|
     desc %{
-      Renders the #{attr.humanize} sent by the Provider
+      Renders the #{attr.humanize} sent by the provider of the embedded object
+      
+      Not all attributes will be present for all providers.
+      (see +r:if_#{attr}+ and +r:unless_#{attr}+)
     }
     tag "oembed:#{attr}" do |tag|
       oembed(tag).send(attr)
+    end
+    
+    desc %{
+      Renders its contents only if the #{attr.humanize} attribute is present for this oembed object
+    }
+    tag "oembed:if_#{attr}" do |tag|
+      tag.expand if oembed(tag).send(attr)
+    end
+
+    desc %{
+      Renders its contents only if the #{attr.humanize} attribute is not present for this oembed object
+    }
+    tag "oembed:unless_#{attr}" do |tag|
+      tag.expand unless oembed(tag).send(attr)
     end
   end
 
