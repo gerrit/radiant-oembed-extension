@@ -31,7 +31,8 @@ module OEmbedTags
   desc %{
     Set the URL of the embedded object.
     
-    Can be used as an alternative to the +url+ attribute on +r:oembed+
+    Can be used as an alternative to the +url+ attribute on +r:oembed+.
+    It should be the first child element of r:oembed in that case.
   
     *Usage:*
     
