@@ -53,8 +53,12 @@ module OEmbedTags
     Renders a thumbnail image for the parent r:oembed tag
   }
   tag 'oembed:thumbnail' do |tag|
-    url, width = oembed(tag).thumbnail_url, oembed(tag).thumbnail_width
-    %{<img src="#{url}" width="#{width}">}
+    attrs = attribute_string(
+      :src => oembed(tag).thumbnail_url,
+      :width => oembed(tag).thumbnail_width,
+      :height => oembed(tag).thumbnail_height
+    )
+    %{<img #{attrs}>}
   end
   
   desc %{
@@ -99,5 +103,9 @@ private
     url, opts = tag.locals.oembed_url, tag.locals.oembed_opts
     raise TagError, 'please specify a url attribute on the r:oembed tag' unless url
     tag.locals.oembed ||= OEmbed::Providers::Embedly.get(url, opts)
+  end
+  
+  def attribute_string(hash)
+    hash.collect{|k,v| %Q{#{k}="#{v}"} if v}.compact.join(' ')
   end
 end
