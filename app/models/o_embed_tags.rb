@@ -38,13 +38,13 @@ module OEmbedTags
     
     <pre><code>
       <r:oembed>
-        <r:url><r:content part="flickr_url" /></r:url>
+        <r:source><r:content part="flickr_url" /></r:source>
         <r:html />
       </r:oembed>
     </pre></code>
   }
 =end
-  tag 'oembed:url' do |tag|
+  tag 'oembed:source' do |tag|
     tag.locals.object.oembed_url = tag.expand.strip
     ''
   end
@@ -64,7 +64,7 @@ module OEmbedTags
     oembed(tag).html
   end
   
-  %w[title description html
+  %w[title description html url
     thumbnail_url thumbnail_width
     author_name author_url
     provider_name provider_url].each do |attr|
