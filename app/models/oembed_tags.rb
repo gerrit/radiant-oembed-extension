@@ -1,9 +1,11 @@
 require 'oembed'
+require 'timeout'
 
-module OEmbedTags
+module OembedTags
   include Radiant::Taggable
   
   class TagError < StandardError;end
+  class OembedTimeout < StandardError;end
   
   desc %{
     Embed 
@@ -102,7 +104,9 @@ private
   def oembed(tag)
     url, opts = tag.locals.oembed_url, tag.locals.oembed_opts
     raise TagError, 'please specify a url attribute on the r:oembed tag' unless url
-    tag.locals.oembed ||= OEmbed::Providers::Embedly.get(url, opts)
+    tag.locals.object.oembed ||= Timeout::timeout(5, OembedTimeout) do
+      OEmbed::Providers::Embedly.get(url, opts)
+    end
   end
   
   def attribute_string(hash)

@@ -8,7 +8,7 @@ class OembedExtension < Radiant::Extension
   
   extension_config do |config|
     config.gem 'ruby-oembed', :version => '>=0.7.0', :lib => 'oembed'
-    Page.send :include, OEmbedTags
+    Page.send :include, OembedTags
   end
   
   def activate
