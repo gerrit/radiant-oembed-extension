@@ -2,6 +2,11 @@
 # require_dependency 'application_controller'
 
 class OembedExtension < Radiant::Extension
+  cattr_writer :cache_timeout
+  def self.cache_timeout
+    @@cache_timeout ||= SiteController.cache_timeout + 1.hour
+  end
+  
   version "0.1"
   description "Easy embedding of arbitrary content (youtube, vimeo, flickr, …) using the oEmbed protocol and the embed.ly API"
   url "http://github.com/gerrit/radiant-oembed-extension"

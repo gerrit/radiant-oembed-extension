@@ -4,7 +4,8 @@ Easily embeds content like YouTube videos, Flickr photos and much more by URL.
 
 For a list of all supported providers see http://api.embed.ly/
 
-Simply write <r:oembed url="http://provider.example.org/photo/234" /> to get the default representation of the resource that is sent by the provider.
+Simply write <r:oembed url="http://provider.example.org/photo/234" /> to get
+the default representation of the resource that is sent by the provider.
 
 Use the expanded form to access metadata about the object.
 Full-featured Example:
@@ -18,3 +19,8 @@ Full-featured Example:
   <h3>Description:</h3>
   <p><r:description /></p>
 </r:oembed>
+
+As some OEmbed-Providers are quite slow, the results of this are cached. By
+default, the cache timeout is 1 hour longer than +SiteController.cache_timeout+
+(the radiant page cache timeout, 5.minutes by default). Change this time by
+setting +OembedExtension.cache_timeout+ to a duration of your choosing.

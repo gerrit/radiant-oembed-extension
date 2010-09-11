@@ -10,7 +10,7 @@ module OembedTags
   desc %{
     Embed 
     
-    If used as a single tag, it will simply 
+    If used as a single tag, it will simply
     
     *Usage:*
     
@@ -105,7 +105,25 @@ private
     url, opts = tag.locals.oembed_url, tag.locals.oembed_opts
     raise TagError, 'please specify a url attribute on the r:oembed tag' unless url
     tag.locals.object.oembed ||= Timeout::timeout(5, OembedTimeout) do
-      OEmbed::Providers::Embedly.get(url, opts)
+      cached url, opts.collect.sort_by {|pair|pair[0]} do
+        logger.info("Getting OEmbed for url #{url}")
+        OEmbed::Providers::Embedly.get(url, opts)
+      end
+    end
+  end
+  
+  def cached(*args, &block)
+    key = (['oembed'] + args).flatten.join('-')
+    expiry_key = "#{key}_expiry"
+    previous_expiry = Rails.cache.read(expiry_key)
+    if previous_expiry && previous_expiry > Time.zone.now
+      Rails.cache.fetch(key, &block)
+    else
+      logger.info("Cache miss for #{key}")
+      block.call.tap do |result|
+        Rails.cache.write(expiry_key, OembedExtension.cache_timeout.from_now)
+        Rails.cache.write(key, result)
+      end
     end
   end
   
