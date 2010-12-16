@@ -19,10 +19,14 @@ module OembedTags
   tag 'oembed' do |tag|
     tag.locals.oembed_url, tag.locals.oembed_opts = tag.attr.delete('url'), tag.attr
     tag.locals.debug = 'here'
-    if tag.double?
-      tag.expand
-    else
-      oembed(tag).html
+    begin
+      if tag.double?
+        tag.expand
+      else
+        oembed(tag).html
+      end
+    rescue
+     %Q(<!-- #{$!}-->\n<a href="#{tag.locals.oembed_url}">#{tag.locals.oembed_url}</a>)
     end
   end
   
@@ -126,7 +130,7 @@ private
       end
     end
   end
-  
+
   def attribute_string(hash)
     hash.collect{|k,v| %Q{#{k}="#{v}"} if v}.compact.join(' ')
   end
